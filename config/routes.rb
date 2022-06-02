@@ -9,6 +9,9 @@
 #   16.03.2022  Rails 7
 ################################################################################
 Rails.application.routes.draw do
+  get 'demo/index'
+  get 'demo/public_api'
+  get 'demo/candlesticks'
 
   app_scope = MULTILINGUAL ? "/:locale" : "/"
   scope app_scope, locale: /#{I18n.available_locales.join("|")}/ do
@@ -26,8 +29,8 @@ Rails.application.routes.draw do
       # Add new admin resources before this line
     end
 
-    root      'pages#home'                               # root_path
-    get :demo, to: 'pages#demo', path: 'demo'
+    root      'pages#home'
+    get        :demo,         to: 'demo#index',        path: 'demo'
     resources  :samples
   end
 
