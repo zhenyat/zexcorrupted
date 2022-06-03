@@ -28,16 +28,12 @@ class DemoController < ApplicationController
       if @dotcom.present? and @dotcom.name == 'binance'
         @api = Api.find_by dotcom: @dotcom, mode: 'demo_api'
         @call = Call.find_by name: 'klines'
-        # @pair = Pair.find_by code: 'BTC/USDT'
-        puts "++++++ #{@pair.inspect}"
         options = {symbol: @pair.code.sub('/', ''), interval: '1h', limit: 50}
         request = GetRequest.new(dotcom: @dotcom, api: @api, call: @call, options: options)
-        puts "====== #{request.inspect}"
         @klines = request.send
-        puts "====== #{@klines.first}}"
+
       elsif  @dotcom.present? and @dotcom.name == 'cexio'
         @api = Api.find_by dotcom: @dotcom, mode: 'demo_api'
-        # @pair = Pair.find_by code: 'BTC/USD'
         @call = Call.find_by name: 'ohlcv'
         extension = "hd/#{(Time.now-1.day).strftime("%Y%m%d")}/#{@pair.code}"
         request = GetRequest.new(dotcom: @dotcom, api: @api, call: @call, extension: extension)
@@ -49,6 +45,7 @@ class DemoController < ApplicationController
             @candles << s.split(',')
           end
         end
+
       else
         # Do nothing now...
       end
