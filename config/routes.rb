@@ -29,6 +29,10 @@ Rails.application.routes.draw do
       resources :dotcoms
       resources :apis
       resources :calls
+      resources :coins
+      resources :coin_nicknames
+      resources :pairs
+      resources :pair_nicknames
       # Add new admin resources before this line
     end
 
@@ -36,7 +40,7 @@ Rails.application.routes.draw do
     get  :demo,         to: 'demo#index',        path: 'demo'
     get  :api_calls,    to: 'demo#api_calls',    path: 'api_calls'
     get  :candlesticks, to: 'demo#candlesticks', path: 'candlesticks'
-    resources  :samples
+    resources :samples
   end
 
   if MULTILINGUAL

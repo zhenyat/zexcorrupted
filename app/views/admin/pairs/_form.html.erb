@@ -1,0 +1,26 @@
+<div class="container">
+  <div class="row">
+    <div class="col-ms-6">
+      <%=  simple_form_for([:admin, @pair], html: {multipart: true}) do |f| %>
+        <%= f.error_notification %>
+        <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+        <div class="form-inputs">
+          <%= f.association :base,  collection: Coin.order(:kind).order(:name), include_blank: false %>
+          <%= f.association :quote, collection: Coin.order(:kind).order(:name), include_blank: false %>
+          <%= f.input :code, placeholder: "BaseCode/QuoteCode" %>
+          <%= f.input :level, include_blank: false %>
+          <%= f.input :decimal_places %>
+          <%= f.input :min_price %>
+          <%= f.input :max_price %>
+          <%= f.input :min_amount %>
+          <%= f.input :hidden %>
+          <%= f.input :fee %>
+          <%= f.input :status, default: 0 %>
+
+          <%= render 'admin/shared/form_actions', f: f, object: @pair %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
