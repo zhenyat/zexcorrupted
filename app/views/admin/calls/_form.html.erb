@@ -1,0 +1,21 @@
+<div class="container">
+  <div class="row">
+    <div class="col-ms-6">
+      <%=  simple_form_for([:admin, @call], html: {multipart: true}) do |f| %>
+        <%= f.error_notification %>
+        <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+        <div class="form-inputs">
+          <%= f.association :api, collection: Api.active.map{ |api| ["#{api.dotcom.name}-#{api.mode}", api.id]}, include_blank: false %>
+          <%= f.input :name %>
+          <%= f.input :title %>
+          <%= f.input :link %>
+          <%= f.input :status, default: 0 %>
+
+          <%= render 'admin/shared/form_rich_text_content', f: f, object: @call %>
+          <%= render 'admin/shared/form_actions', f: f, object: @call %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -1,27 +1,25 @@
 class DemoController < ApplicationController
-  include RequestPro
-  before_action :find_dotocom_api_method, only: :public_api
+  include Request
+  before_action :select_dotcom_api_call, only: :api_calls
+
   def index
   end
 
-  def public_api
+  # NB!  demo calls are public calls
+  def api_calls
     @dotcoms  = Dotcom.active
-    @apis = @dotcom&.apis || []               # ActiveRecord::Associations::CollectionProxy of Apis
+    @apis = @dotcom&.apis || []     # ActiveRecord::Associations::CollectionProxy of Apis
     if not @api.nil? and @api.mode == 'demo_api'
       api = Api.find_by dotcom: @dotcom, mode: 'public_api'
-      @api_methods = api.api_methods
+      @calls = api.calls
     else
-      @api_methods  = @api&.api_methods || []   # ActiveRecord::Associations::CollectionProxy of ApiMethods
+      @calls  = @api&.calls || []   # ActiveRecord::Associations::CollectionProxy of ApiMethods
     end
+
+    request = GetRequest.new(dotcom: @dotcom, api: @api, call: @call)
+    @response = request.send
   end
 
   def candlesticks
   end
-
-  # private
-    # def find_dotocom_api_method
-    #   @dotcom      = Dotcom.find_by(id: params[:dotcom].presence)  # object.present? ? object : nil, 
-    #   @api         = Api.find_by(id: params[:api].presence)
-    #   @api_method  = ApiMethod.find_by(id: params[:api_method].presence)
-    # end
 end

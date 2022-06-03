@@ -26,11 +26,16 @@ Rails.application.routes.draw do
       root 'panel#index'                                 # admin_root_path
       resources :users
       resources :samples
+      resources :dotcoms
+      resources :apis
+      resources :calls
       # Add new admin resources before this line
     end
 
-    root      'pages#home'
-    get        :demo,         to: 'demo#index',        path: 'demo'
+    root 'pages#home'
+    get  :demo,         to: 'demo#index',        path: 'demo'
+    get  :api_calls,    to: 'demo#api_calls',    path: 'api_calls'
+    get  :candlesticks, to: 'demo#candlesticks', path: 'candlesticks'
     resources  :samples
   end
 

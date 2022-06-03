@@ -1,0 +1,26 @@
+<h1>Demo: API Calls</h1>
+
+<div class="block">
+  <%= form_tag api_calls_path, method: :get do %>
+    <%= select_tag :dotcom,  options_from_collection_for_select(@dotcoms, "id", "name", 
+      @dotcom&.id), prompt: "- Dotcom Name", onchange: "this.form.submit()" 
+    %>
+    <%= select_tag :api,  options_from_collection_for_select(@apis, "id", "mode", 
+      @api&.id), prompt: "- Api Mode", onchange: "this.form.submit()" 
+    %>
+    <%= select_tag :call,  options_from_collection_for_select(@calls, "id", "name", 
+      @call&.id), prompt: "- Api Calls", onchange: "this.form.submit()" 
+    %>
+  <% end %>
+</div>
+
+<% if @call %>
+  <div class="block mt-4">
+    Selected: <%= "#{@dotcom.name} | #{@api.mode} |#{@call.name}" %>
+    <br>Dotcom: <%= @call.api.dotcom.name %>
+  </div>
+  <div class="block mt-4">
+    <%= @response %>
+  </div>
+<% end %>
+

@@ -53,6 +53,7 @@ gem 'translate_enum'
 gem 'pundit'            # https://github.com/elabs/pundit
 gem 'countries'
 
+gem 'net-http'
 gem 'rack-cors'
 gem 'devise'                       # https://github.com/plataformatec/devise
 gem 'devise_token_auth', github:  'lynndylanhurley/devise_token_auth'

@@ -1,0 +1,21 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  dotcom: one
+  mode: 1
+  base_url: MyString
+  path: MyString
+  key: MyString
+  secret: MyString
+  user: MyString
+  status: 1
+
+two:
+  dotcom: two
+  mode: 1
+  base_url: MyString
+  path: MyString
+  key: MyString
+  secret: MyString
+  user: MyString
+  status: 1

@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <!-- Brand (App Home Page) -->
     <div class="navbar-brand">
-      <%= link_to image_tag('logos/dummy.png', title: app_name,  size: '142x82'), root_path %>
+      <%= link_to image_tag('logos/app.png', title: app_name,  size: '50x50'), root_path %>
     </div>
     <button aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-bs-target="#navbarNav" data-bs-toggle="collapse" type="button">
       <span class="navbar-toggler-icon"></span>
@@ -11,7 +11,7 @@
       <ul class="navbar-nav me-auto">
         <li class="nav-item">
           <div class="nav-link">
-            <%= link_to  admin_root_path do %>
+            <%= link_to(admin_root_path, class: "text-decoration-none") do %>
               <span aria-hidden="true" class="fas fa-tools fa-2x" style="color:navy"></span>
               <%= t(:admin_home) %>
             <% end %>
@@ -20,7 +20,7 @@
         <li class="nav-item">
           <% if @current_user.superadmin? %>
             <div class="nav-link">
-              <%= link_to admin_users_path do %>
+              <%= link_to(admin_users_path, class: "text-decoration-none") do %>
                 <span aria-hidden="true" class="fas fa-users fa-2x" style="color:navy"></span>
                 <%= t User.model_name.human(count: 2) %>
               <% end %>
@@ -42,18 +42,31 @@
             <%= t(:data) %>
           </a>
           <div aria-labelledby="navbarDropdown" class="dropdown-menu">
-            <div class="dropdown-item" >
-              <%#= link_to t(Company.model_name.human(count: 2)),  admin_items_path %>
-            </div>
-            <div class="dropdown-item" >
-              <%#= link_to t(Category.model_name.human(count: 2)),  admin_categories_path %>
+            <div class="dropdown-item">
+              <%= link_to t(Dotcom.model_name.human(count: 2)), admin_dotcoms_path, class: "text-decoration-none"  %>
             </div>
             <div class="dropdown-item">
-              <%#= link_to t(Partner.model_name.human(count: 2)), admin_partners_path %>
+              <%= link_to t(Api.model_name.human(count: 2)), admin_apis_path, class: "text-decoration-none"  %>
+            </div>
+            <div class="dropdown-item">
+              <%= link_to t(Call.model_name.human(count: 2)), admin_calls_path, class: "text-decoration-none"  %>
+            </div>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-item" >
+              <%#= link_to t(Coin.model_name.human(count: 2)),  admin_coins_path, class: "text-decoration-none"  %>
+            </div>
+            <div class="dropdown-item" >
+              <%#= link_to t(CoinNickname.model_name.human(count: 2)),  admin_coin_nicknames_path, class: "text-decoration-none" %>
+            </div>
+            <div class="dropdown-item">
+              <%#= link_to t(Pair.model_name.human(count: 2)), admin_pairs_path, class: "text-decoration-none"  %>
+            </div>
+             <div class="dropdown-item">
+              <%#= link_to t(PairNickname.model_name.human(count: 2)), admin_pair_nicknames_path, class: "text-decoration-none"  %>
             </div>
             <div class="dropdown-divider"></div>
             <div class="dropdown-item">
-              <%= link_to t(Sample.model_name.human(count: 2)), admin_samples_path %>
+              <%#= link_to t(Sample.model_name.human(count: 2)), admin_samples_path, class: "text-decoration-none"  %>
             </div>
             <div class="dropdown-item">
               <%#= link_to t(:dummy), '#' %>
@@ -74,7 +87,7 @@
         <% end %>
         <li class="nav-item">
           <div class="nav-link">
-            <%= link_to(logout_path, method: 'delete') do %>
+            <%= link_to(logout_path, method: 'delete', class: "text-decoration-none") do %>
               <span aria-hidden="true" class="fas fa-sign-out-alt fa-2x" style="color:navy"></span>
               <%= t 'simple_form.submit.logout' %>
             <% end %>
