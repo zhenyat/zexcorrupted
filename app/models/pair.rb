@@ -34,4 +34,8 @@ class Pair < ApplicationRecord
   def name
     "#{base.code.downcase}_#{quote.code.downcase}"
   end
+
+  def base_ordered
+    base.order(:code)
+  end
 end

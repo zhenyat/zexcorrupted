@@ -5,7 +5,7 @@ begin
     puts "--- Base: EUR"
     Pair.create base_id: base_id, quote_id: Coin.find_by(code: 'USD').id, code: 'EUR/USD', level: 'Major',
       decimal_places: 5, min_price: 0.5e0, max_price: 2.0, min_amount: 0.1e0,
-      fee: 0.2e0, status: "active"
+      fee: 0.2e0, status: "archived"
     Pair.create base_id: base_id, quote_id: Coin.find_by(code: 'GBP').id, code: 'EUR/GBP', level: 'Minor',
       # decimal_places: 5, min_price: 0.5e0, max_price: 2.0, min_amount: 0.1e0,
       fee: 0.2e0, status: "archived"
@@ -26,7 +26,7 @@ begin
       fee: 0.2e0, status: "archived"
     Pair.create base_id: base_id, quote_id: Coin.find_by(code: 'RUB').id, code: 'EUR/RUB', level: 'Exotic',
       # decimal_places: 5, min_price: 0.5e0, max_price: 2.0, min_amount: 0.1e0,
-      fee: 0.2e0
+      fee: 0.2e0, status: "archived"
 
     ### Base Currency: USD
     base_id = Coin.find_by(code: 'USD').id
@@ -42,7 +42,7 @@ begin
       fee: 0.2e0, status: "archived"
     Pair.create base_id: base_id, quote_id: Coin.find_by(code: 'RUB').id, code: 'USD/RUB', level: 'Exotic',
       # decimal_places: 5, min_price: 0.5e0, max_price: 2.0, min_amount: 0.1e0,
-      fee: 0.2e0
+      fee: 0.2e0, status: "archived"
 
     ### Base Currency: GBP
     base_id = Coin.find_by(code: 'GBP').id

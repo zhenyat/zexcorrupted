@@ -2,7 +2,7 @@ class Admin::PairsController < Admin::BaseController
   before_action :set_pair, only: [:show, :edit, :update,:destroy]
 
   def index
-    @pairs = policy_scope(Pair)
+    @pairs = policy_scope(Pair).order(:status).order(:code)
   end
 
   def show

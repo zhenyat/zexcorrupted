@@ -57,9 +57,10 @@ module Request
 
   private
     # Selects instances from DDDLs
-    def select_dotcom_api_call
+    def selected_from_dddl
       @dotcom  = Dotcom.find_by(id: params[:dotcom].presence)  # object.present? ? object : nil, 
       @api     = Api.find_by(id: params[:api].presence)
       @call    = Call.find_by(id: params[:call].presence)
+      @pair    = Pair.find_by(id: params[:pair].presence)
     end
 end

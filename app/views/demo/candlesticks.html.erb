@@ -1,2 +1,88 @@
-<h1>Demo#candlesticks</h1>
-<p>Find me in app/views/demo/candlesticks.html.erb</p>
+<div class="container">
+  <h1>Demo: Candlesticks</h1>
+  <div class="block">
+    <%= form_tag candlesticks_path, method: :get do %>
+      <%= select_tag :dotcom,  options_from_collection_for_select(@dotcoms, "id", "name", 
+        @dotcom&.id), prompt: "- Dotcom Name", onchange: "this.form.submit()" 
+      %>
+      <%= select_tag :pair,  options_from_collection_for_select(@pairs, "id", "code", 
+        @dotcom&.id), prompt: "- Pair code", onchange: "this.form.submit()" 
+      %>
+    <% end %>
+
+  <% if @klines %>
+    <div class="block mt-4">
+      <h5>Pair: <%= @pair.code %></h5>
+
+      <table class='table table-hover'>
+        <thead>
+          <th>Open time</th>
+          <th>Open</th>
+          <th>High</th>
+          <th>Low</th>
+          <th>Close</th>
+          <th>Volume</th>
+          <th>Close time</th>
+          <th>Quote asset volume</th>
+          <th>Number of trades</th>
+          <th>Taker buy base asset volume</th>
+          <th>Taker buy quote asset volume</th>
+        </thead>
+        <tbody>
+          <% @klines.each do |kline| %>
+            <% if kline[4] > kline[1]%>
+              <tr class="text-success">
+            <% else %>
+              <tr class="text-danger">
+            <% end %>
+              <td><%= Time.at(kline[0]/1000).strftime('%Y-%m-%d %H:%M:%S') %></td>
+              <td><%= kline[1] %></td>
+              <td><%= kline[2] %></td>
+              <td><%= kline[3] %></td>
+              <td><%= kline[4] %></td>
+              <td><%= kline[5] %></td>
+              <td><%= Time.at(kline[6]/1000).strftime('%Y-%m-%d %H:%M:%S') %></td>
+              <td><%= kline[7] %></td>
+              <td><%= kline[8] %></td>
+              <td><%= kline[9]  %></td>
+              <td><%= kline[10] %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% elsif @candles %>
+    <div class="block mt-4">
+      <h5>Pair: <%= @pair.code %></h5>
+      <table class='table table-hover'>
+        <thead>
+          <th>Open time</th>
+          <th>Open</th>
+          <th>High</th>
+          <th>Low</th>
+          <th>Close</th>
+          <th>Volume</th>
+        </thead>
+        <tbody>
+          <% @candles.each do |candle| %>
+            <% if candle[4] > candle[1]%>
+              <tr class="text-success">
+            <% else %>
+              <tr class="text-danger">
+            <% end %>
+              <td><%= Time.at(candle[0].to_i).strftime('%Y-%m-%d %H:%M:%S') %></td>
+              <td><%= candle[1].to_f %></td>
+              <td><%= candle[2].to_f %></td>
+              <td><%= candle[3].to_f %></td>
+              <td><%= candle[4].to_f %></td>
+              <td><%= candle[5].to_f %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else%>
+    Nothing
+  <% end %>
+  </div>
+</div>
