@@ -31,11 +31,22 @@ class Pair < ApplicationRecord
   validates :quote, presence: true, comparison: {other_than: :base, message: "must differ from the Base"} 
   validates :code,  presence: true, uniqueness: true
 
+  def base_ordered
+    base.order(:code)
+  end
+
   def name
     "#{base.code.downcase}_#{quote.code.downcase}"
   end
 
-  def base_ordered
-    base.order(:code)
+  def symbol(dotcom_name:)
+    case dotcom_name
+    when 'binance'
+      self.code.gsub('/', '')
+    when 'cexio'
+      self.code
+    else
+      self.code
+    end
   end
 end

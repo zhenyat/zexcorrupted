@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_06_03_092847) do
+ActiveRecord::Schema[7.0].define(version: 2022_06_04_071725) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -149,6 +149,20 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_03_092847) do
     t.index ["name"], name: "index_samples_on_name", unique: true
   end
 
+  create_table "trades", force: :cascade do |t|
+    t.bigint "dotcom_id", null: false
+    t.bigint "pair_id"
+    t.integer "kind", limit: 2
+    t.decimal "price", precision: 15, scale: 5
+    t.decimal "amount", precision: 15, scale: 8
+    t.integer "tid"
+    t.integer "timestamp"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["dotcom_id"], name: "index_trades_on_dotcom_id"
+    t.index ["pair_id"], name: "index_trades_on_pair_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.integer "role", limit: 2, default: 0, null: false
     t.string "last_name", null: false
@@ -168,4 +182,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_03_092847) do
   add_foreign_key "calls", "apis"
   add_foreign_key "coin_nicknames", "coins"
   add_foreign_key "pair_nicknames", "pairs"
+  add_foreign_key "trades", "dotcoms"
+  add_foreign_key "trades", "pairs"
 end

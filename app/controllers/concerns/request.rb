@@ -56,7 +56,12 @@ module Request
   end
 
   private
-    # Selects instances from DDDLs
+    # Clones public_api calls to demo_api
+    def demo_calls(dotcom)
+      Api.find_by( dotcom: dotcom, mode: 'public_api').calls
+    end
+
+    # Selects instances from DDDLs - obsolete? (cause of an extra SELECT)
     def selected_from_dddl
       @dotcom  = Dotcom.find_by(id: params[:dotcom].presence)  # object.present? ? object : nil, 
       @api     = Api.find_by(id: params[:api].presence)

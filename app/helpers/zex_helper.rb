@@ -46,4 +46,9 @@ module ZexHelper
     content_tag :span, images.join("\n").html_safe, class: "img-circle"
     # content_tag :div, images.join("\n").html_safe, class: "img-circle"
   end
+
+  def show_time timestamp
+    Time.at(timestamp).strftime('%Y-%m-%d %H:%M:%S')
+  end
 end
+

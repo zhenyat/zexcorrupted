@@ -1,6 +1,6 @@
 class DemoController < ApplicationController
   include Request
-  before_action :selected_from_dddl, only: [:api_calls, :candlesticks, :trades]
+  before_action :selected_from_dddl, only: [:api_calls, :candlesticks]
 
   def index
   end
@@ -53,33 +53,14 @@ class DemoController < ApplicationController
   end
 
   def trades
-    @dotcoms = Dotcom.active
-    @pairs   = Pair.active.order(:status).order(:code)
+    @pair   = Pair.active.find_by   code: 'BTC/USDT'
+    @dotcom = Dotcom.active.find_by name: 'binance'
+    @api    = @dotcom.apis.find_by   mode: 'demo_api'
+    @call   = demo_calls(@dotcom).find_by name: 'trades'
 
-    if @pair.present?
-      if @dotcom.present? and @dotcom.name == 'binance'
-        # One way
-        @api = Api.find_by dotcom: @dotcom, mode: 'demo_api'
-        @call = Call.find_by name: 'trades'
-
-        # An other way - extra SELECT...
-        # @api = @dotcom.apis.find_by mode: 'demo_api'
-        # @call = demo_calls(@dotcom).find_by name: 'trades'
-
-        options = { symbol: @pair.symbol(dotcom_name: @dotcom.name), limit: 50 }
-        request = GetRequest.new(dotcom: @dotcom, api: @api, call: @call, options: options)
-        @trades = request.send
-
-      elsif  @dotcom.present? and @dotcom.name == 'cexio'
-        @api = Api.find_by dotcom: @dotcom, mode: 'demo_api'
-        @call = Call.find_by name: 'trade_history'
-        extension = "#{@pair.symbol(dotcom_name: @dotcom.name)}"
-        request = GetRequest.new(dotcom: @dotcom, api: @api, call: @call, extension: extension)
-        @trades = request.send
-
-      else
-        # Do nothing now...
-      end
-    end
+    options = { symbol: @pair.symbol(dotcom_name: @dotcom.name), limit: 50 }
+    request = GetRequest.new(dotcom: @dotcom, api: @api, call: @call, options: options)
+    @trades  = request.send
+    
   end
 end

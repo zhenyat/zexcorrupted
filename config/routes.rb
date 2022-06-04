@@ -40,6 +40,7 @@ Rails.application.routes.draw do
     get  :demo,         to: 'demo#index',        path: 'demo'
     get  :api_calls,    to: 'demo#api_calls',    path: 'api_calls'
     get  :candlesticks, to: 'demo#candlesticks', path: 'candlesticks'
+    get  :trades,       to: 'demo#trades',       path: 'trades'
     resources :samples
   end
 

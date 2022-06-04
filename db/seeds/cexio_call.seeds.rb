@@ -43,7 +43,7 @@ begin
       am.save
 
       am = Call.create(
-        api: api, name: 'converter', title: 'Converter)',
+        api: api, name: 'converter', title: 'Converter',
         link: 'https://cex.io/rest-api#converter'
       )
       am.content.body = "<strong>POST https://cex.io/api/convert/{symbol1}/{symbol2}</strong>"
