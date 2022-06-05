@@ -17,6 +17,7 @@ class Dotcom < ApplicationRecord
 
   has_rich_text :content
   has_many :apis, dependent: :destroy
+  has_and_belongs_to_many :pairs, join_table: :dotcoms_pairs
 
   enum status: %w(active archived)
 

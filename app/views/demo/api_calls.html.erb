@@ -3,7 +3,7 @@
 <div class="block">
   <%= form_tag api_calls_path, method: :get do %>
     <%= select_tag :dotcom,  options_from_collection_for_select(@dotcoms, "id", "name", 
-      @dotcom&.id), prompt: "- Dotcom Name", onchange: "this.form.submit()" 
+      @dotcom&.id), prompt: "- Dotcom", onchange: "this.form.submit()" 
     %>
     <%= select_tag :api,  options_from_collection_for_select(@apis, "id", "mode", 
       @api&.id), prompt: "- Api Mode", onchange: "this.form.submit()" 

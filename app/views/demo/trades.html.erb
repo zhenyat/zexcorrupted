@@ -1,71 +1,81 @@
 <div class="container">
   <h1>Demo: Trades</h1>
-  <div class="block">
+  <h5 class="text-info">Not all Pairs are working in Demo!</h5>
+  <div>
     <%= form_tag trades_path, method: :get do %>
       <%= select_tag :dotcom,  options_from_collection_for_select(@dotcoms, "id", "name", 
-        @dotcom&.id), prompt: "- Dotcom Name", onchange: "this.form.submit()" 
+        @dotcom&.id), prompt: "- Dotcom", onchange: "this.form.submit()" 
       %>
       <%= select_tag :pair,  options_from_collection_for_select(@pairs, "id", "code", 
-        @dotcom&.id), prompt: "- Pair code", onchange: "this.form.submit()" 
+        @dotcom&.id), prompt: "- Pair", onchange: "this.form.submit()" 
       %>
     <% end %>
-
-  <% if @trades and @dotcom.name == 'binance' %>
-    <h5>Pair: <%= @pair.code %></h5>
-    <div class="block mt-4">
-      <table class='table table-hover'>
-        <thead>
-          <th>Trade ID</th>
-          <th>Price</th>
-          <th>Qty</th>
-          <th>Quote Qty</th>
-          <th>Time</th>
-        </thead>
-        <tbody>
-          <% @trades.each do |trade| %>
-            <% if trade['isBuyerMaker'] %>
-              <tr class="text-danger">
-            <% else %>
-              <tr class="text-success">
+  </div>
+  <hr/>
+  <div>
+    <% if @dotcom.present? and @pair.present? and @trades.present? %>
+      <h5>Pair: <%= @pair.code %></h5>
+      <% if @dotcom.name == 'binance' %>
+        <table class='table table-hover'>
+          <thead>
+            <th>Trade ID</th>
+            <th>Price</th>
+            <th>Qty</th>
+            <th>Quote Qty</th>
+            <th>Time</th>
+          </thead>
+          <tbody>
+            <% @trades.each do |trade| %>
+              <% if trade['isBuyerMaker'] %>
+                <tr class="text-danger">
+              <% else %>
+                <tr class="text-success">
+              <% end %>
+                <td><%= trade['id'] %></td>
+                <td><%= trade['price'] %></td>
+                <td><%= trade['qty'] %></td>
+                <td><%= trade['quoteQty'] %></td>
+                <td><%= show_time(trade['time']/1000) %></td>
+              </tr>
             <% end %>
-              <td><%= trade['id'] %></td>
-              <td><%= trade['price'] %></td>
-              <td><%= trade['qty'] %></td>
-              <td><%= trade['quoteQty'] %></td>
-              <td><%= show_time(trade['time']/1000) %></td>
-              <!--td><%= Time.at(trade['time']/1000).strftime('%Y-%m-%d %H:%M:%S') %></td-->
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
-  <% elsif @trades and @dotcom.name == 'cexio' %>
-    <h5>Pair: <%= @pair.code %></h5>
-    <div class="block mt-4">
-      <table class='table table-hover'>
-        <thead>
-          <th>Trade Type</th>
-          <th>Date</th>
-          <th>Amount</th>
-          <th>Price</th>
-          <th>Trade ID</th>
-        </thead>
-        <tbody>
-          <% @trades.each do |trade| %>
-            <% if trade['type'] == 'buy' %>
-              <tr class="text-danger">
-            <% else %>
-              <tr class="text-success">
+          </tbody>
+        </table>
+      <% elsif @dotcom.name == 'cexio' %>
+        <table class='table table-hover'>
+          <thead>
+            <th>Trade Type</th>
+            <th>Date</th>
+            <th>Amount</th>
+            <th>Price</th>
+            <th>Trade ID</th>
+          </thead>
+          <tbody>
+            <% @trades.each do |trade| %>
+              <% if trade['type'] == 'buy' %>
+                <tr class="text-danger">
+              <% else %>
+                <tr class="text-success">
+              <% end %>
+                <td><%= trade['type'] %></td>
+                <td><%= show_time(trade['date'].to_i) %></td>
+                <td><%= trade['amount'] %></td>
+                <td><%= trade['price'] %></td>
+                <td><%= trade['tid'] %></td>
+              </tr>
             <% end %>
-              <td><%= trade['type'] %></td>
-              <td><%= show_time(trade['date'].to_i) %></td>
-              <td><%= trade['amount'] %></td>
-              <td><%= trade['price'] %></td>
-              <td><%= trade['tid'] %></td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-  <% else %>
-  <% end %>
+          </tbody>
+        </table>
+      <% end %>
+    <% else %>
+      <% if @error_msg.present? %>
+        <div class="text-danger">
+          <hr/>
+          <h5>Error</h5>
+            <p>Code: <strong><%= @error_msg['code'] %></strong></p>
+            <p>Message: <strong><%= @error_msg['msg'] %></strong></p>
+          </tr>     
+        </div>
+      <% end %>
+    <% end %>
+  </div>
 </div>

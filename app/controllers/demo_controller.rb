@@ -22,63 +22,82 @@ class DemoController < ApplicationController
 
   def candlesticks
     @dotcoms = Dotcom.active
-    @pairs   = Pair.active.order(:status).order(:code)
+    @pairs   = @dotcom.present? ? @dotcom.pairs : Pair.active.order(:status).order(:code)
 
     if @pair.present?
-      if @dotcom.present? and @dotcom.name == 'binance'
-        @api = Api.find_by dotcom: @dotcom, mode: 'demo_api'
-        @call = Call.find_by name: 'klines'
-        options = {symbol: @pair.code.sub('/', ''), interval: '1h', limit: 50}
-        request = GetRequest.new(dotcom: @dotcom, api: @api, call: @call, options: options)
-        @klines = request.send
-
-      elsif  @dotcom.present? and @dotcom.name == 'cexio'
-        @api = Api.find_by dotcom: @dotcom, mode: 'demo_api'
-        @call = Call.find_by name: 'ohlcv'
-        extension = "hd/#{(Time.now-1.day).strftime("%Y%m%d")}/#{@pair.code}"
-        request = GetRequest.new(dotcom: @dotcom, api: @api, call: @call, extension: extension)
-        ohlcv = request.send
-        if ohlcv.present?
-          strings_array = ohlcv["data1h"].gsub('],[', ';').gsub('[','').gsub(']','').split(';')
-          @candles = []
-          strings_array.each do |s|
-            @candles << s.split(',')
+      if @dotcom.present?
+        if @dotcom.name == 'binance'
+          @api = Api.find_by dotcom: @dotcom, mode: 'demo_api'
+          @call = Call.find_by name: 'klines'
+          options = {symbol: @pair.code.sub('/', ''), interval: '1h', limit: 50}
+          request = GetRequest.new(dotcom: @dotcom, api: @api, call: @call, options: options)
+          response = request.send
+        elsif @dotcom.name == 'cexio'
+          @api = Api.find_by dotcom: @dotcom, mode: 'demo_api'
+          @call = Call.find_by name: 'ohlcv'
+          extension = "hd/#{(Time.now-1.day).strftime("%Y%m%d")}/#{@pair.code}"
+          request = GetRequest.new(dotcom: @dotcom, api: @api, call: @call, extension: extension)
+          ohlcv = request.send
+          if ohlcv["data1h"].present?
+            strings_array = ohlcv["data1h"].gsub('],[', ';').gsub('[','').gsub(']','').split(';')
+            response = []
+            strings_array.each do |s|
+              response << s.split(',')
+            end
           end
+        else
+          response = {'code': 'ZEX', 'msg': "#{@dotcom.name}} not allowed"}
         end
-
-      else
-        # Do nothing now...
+        # Classify the response
+        if response.is_a? Hash
+          @error_msg = response
+          @candles = []
+        else
+          @candles = response
+          @error_msg = {}
+        end
       end
     end
   end
 
+
   def trades
     @dotcoms = Dotcom.active
-    @pairs   = Pair.active.order(:status).order(:code)
+    # @pairs = Pair.active.order(:status).order(:code)
+    @pairs   = @dotcom.present? ? @dotcom.pairs : Pair.active.order(:status).order(:code)
 
     if @pair.present?
-      if @dotcom.present? and @dotcom.name == 'binance'
-        # One way
-        @api = Api.find_by dotcom: @dotcom, mode: 'demo_api'
-        @call = Call.find_by name: 'trades'
+      if @dotcom.present?
+        if @dotcom.name == 'binance'
+          # One way
+          @api = Api.find_by dotcom: @dotcom, mode: 'demo_api'
+          @call = Call.find_by name: 'trades'
 
-        # An other way - extra SELECT...
-        # @api = @dotcom.apis.find_by mode: 'demo_api'
-        # @call = demo_calls(@dotcom).find_by name: 'trades'
+          # An other way - extra SELECT...
+          # @api = @dotcom.apis.find_by mode: 'demo_api'
+          # @call = demo_calls(@dotcom).find_by name: 'trades'
 
-        options = { symbol: @pair.symbol(dotcom_name: @dotcom.name), limit: 50 }
-        request = GetRequest.new(dotcom: @dotcom, api: @api, call: @call, options: options)
-        @trades = request.send
+          options = { symbol: @pair.symbol(dotcom_name: @dotcom.name), limit: 50 }
+          request = GetRequest.new(dotcom: @dotcom, api: @api, call: @call, options: options)
+          response = request.send
 
-      elsif  @dotcom.present? and @dotcom.name == 'cexio'
-        @api = Api.find_by dotcom: @dotcom, mode: 'demo_api'
-        @call = Call.find_by name: 'trade_history'
-        extension = "#{@pair.symbol(dotcom_name: @dotcom.name)}"
-        request = GetRequest.new(dotcom: @dotcom, api: @api, call: @call, extension: extension)
-        @trades = request.send
-
+        elsif @dotcom.name == 'cexio'
+          @api = Api.find_by dotcom: @dotcom, mode: 'demo_api'
+          @call = Call.find_by name: 'trade_history'
+          extension = "#{@pair.symbol(dotcom_name: @dotcom.name)}"
+          request = GetRequest.new(dotcom: @dotcom, api: @api, call: @call, extension: extension)
+          response = request.send
+        else
+          response = {'code': 'ZEX', 'msg': "#{@dotcom.name}} not allowed"}
+        end
+      end
+      # Classify the response
+      if response.is_a? Hash
+        @error_msg = response
+        @trades = []
       else
-        # Do nothing now...
+        @trades = response
+        @error_msg = {}
       end
     end
   end

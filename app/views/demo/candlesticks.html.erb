@@ -1,88 +1,95 @@
 <div class="container">
   <h1>Demo: Candlesticks</h1>
-  <div class="block">
+  <h5 class="text-info">Not all Pairs are working in Demo!</h5>
+  <div>
     <%= form_tag candlesticks_path, method: :get do %>
       <%= select_tag :dotcom,  options_from_collection_for_select(@dotcoms, "id", "name", 
-        @dotcom&.id), prompt: "- Dotcom Name", onchange: "this.form.submit()" 
+        @dotcom&.id), prompt: "- Dotcom", onchange: "this.form.submit()" 
       %>
       <%= select_tag :pair,  options_from_collection_for_select(@pairs, "id", "code", 
-        @dotcom&.id), prompt: "- Pair code", onchange: "this.form.submit()" 
+        @dotcom&.id), prompt: "- Pair", onchange: "this.form.submit()" 
       %>
     <% end %>
-
-  <% if @klines %>
-    <div class="block mt-4">
+  </div>
+  <hr/>
+  <div>
+    <% if @dotcom.present? and @pair.present? and @candles.present? %>
       <h5>Pair: <%= @pair.code %></h5>
-
-      <table class='table table-hover'>
-        <thead>
-          <th>Open time</th>
-          <th>Open</th>
-          <th>High</th>
-          <th>Low</th>
-          <th>Close</th>
-          <th>Volume</th>
-          <th>Close time</th>
-          <th>Quote asset volume</th>
-          <th>Number of trades</th>
-          <th>Taker buy base asset volume</th>
-          <th>Taker buy quote asset volume</th>
-        </thead>
-        <tbody>
-          <% @klines.each do |kline| %>
-            <% if kline[4] > kline[1]%>
-              <tr class="text-success">
-            <% else %>
-              <tr class="text-danger">
+      <% if @dotcom.name == 'binance' %>
+        <table class='table table-hover'>
+          <thead>
+            <th>Open time</th>
+            <th>Open</th>
+            <th>High</th>
+            <th>Low</th>
+            <th>Close</th>
+            <th>Volume</th>
+            <th>Close time</th>
+            <th>Quote asset volume</th>
+            <th>Number of trades</th>
+            <th>Taker buy base asset volume</th>
+            <th>Taker buy quote asset volume</th>
+          </thead>
+          <tbody>
+            <% @candles.each do |candle| %>
+              <% if candle[4] > candle[1]%>
+                <tr class="text-success">
+              <% else %>
+                <tr class="text-danger">
+              <% end %>
+                <td><%= show_time(candle[0]/1000) %></td>
+                <td><%= candle[1] %></td>
+                <td><%= candle[2] %></td>
+                <td><%= candle[3] %></td>
+                <td><%= candle[4] %></td>
+                <td><%= candle[5] %></td>
+                <td><%= show_time(candle[6]/1000) %></td>
+                <td><%= candle[7] %></td>
+                <td><%= candle[8] %></td>
+                <td><%= candle[9]  %></td>
+                <td><%= candle[10] %></td>
+              </tr>
             <% end %>
-              <td><%= show_time(kline[0]/1000) %></td>
-              <td><%= kline[1] %></td>
-              <td><%= kline[2] %></td>
-              <td><%= kline[3] %></td>
-              <td><%= kline[4] %></td>
-              <td><%= kline[5] %></td>
-              <td><%= show_time(kline[6]/1000) %></td>
-              <td><%= kline[7] %></td>
-              <td><%= kline[8] %></td>
-              <td><%= kline[9]  %></td>
-              <td><%= kline[10] %></td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
-  <% elsif @candles %>
-    <div class="block mt-4">
-      <h5>Pair: <%= @pair.code %></h5>
-      <table class='table table-hover'>
-        <thead>
-          <th>Open time</th>
-          <th>Open</th>
-          <th>High</th>
-          <th>Low</th>
-          <th>Close</th>
-          <th>Volume</th>
-        </thead>
-        <tbody>
-          <% @candles.each do |candle| %>
-            <% if candle[4] > candle[1]%>
-              <tr class="text-success">
-            <% else %>
-              <tr class="text-danger">
+          </tbody>
+        </table>
+      <% elsif @dotcom.name == 'cexio' %>
+        <table class='table table-hover'>
+          <thead>
+            <th>Open time</th>
+            <th>Open</th>
+            <th>High</th>
+            <th>Low</th>
+            <th>Close</th>
+            <th>Volume</th>
+          </thead>
+          <tbody>
+            <% @candles.each do |candle| %>
+              <% if candle[4] > candle[1]%>
+                <tr class="text-success">
+              <% else %>
+                <tr class="text-danger">
+              <% end %>
+                <td><%= show_time(candle[0].to_i) %></td>
+                <td><%= candle[1].to_f %></td>
+                <td><%= candle[2].to_f %></td>
+                <td><%= candle[3].to_f %></td>
+                <td><%= candle[4].to_f %></td>
+                <td><%= candle[5].to_f %></td>
+              </tr>
             <% end %>
-              <td><%= show_time(candle[0].to_i) %></td>
-              <td><%= candle[1].to_f %></td>
-              <td><%= candle[2].to_f %></td>
-              <td><%= candle[3].to_f %></td>
-              <td><%= candle[4].to_f %></td>
-              <td><%= candle[5].to_f %></td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
+          </tbody>
+        </table>
+      <% end %>
   <% else%>
-    Nothing
+    <% if @error_msg.present? %>
+      <div class="text-danger">
+        <hr/>
+        <h5>Error</h5>
+          <p>Code: <strong><%= @error_msg['code'] %></strong></p>
+          <p>Message: <strong><%= @error_msg['msg'] %></strong></p>
+        </tr>     
+      </div>
+    <% end %>
   <% end %>
   </div>
 </div>
