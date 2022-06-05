@@ -1,6 +1,6 @@
 class DemoController < ApplicationController
   include Request
-  before_action :selected_from_dddl, only: [:api_calls, :candlesticks, :trades]
+  before_action :selected_from_dddl, only: [:api_calls, :api_candlesticks, :api_trades]
 
   def index
   end
@@ -20,7 +20,7 @@ class DemoController < ApplicationController
     @response = request.send
   end
 
-  def candlesticks
+  def api_candlesticks
     @dotcoms = Dotcom.active
     @pairs   = @dotcom.present? ? @dotcom.pairs : Pair.active.order(:status).order(:code)
 
@@ -61,7 +61,7 @@ class DemoController < ApplicationController
   end
 
 
-  def trades
+  def api_trades
     @dotcoms = Dotcom.active
     # @pairs = Pair.active.order(:status).order(:code)
     @pairs   = @dotcom.present? ? @dotcom.pairs : Pair.active.order(:status).order(:code)

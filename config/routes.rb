@@ -37,10 +37,10 @@ Rails.application.routes.draw do
     end
 
     root 'pages#home'
-    get  :demo,         to: 'demo#index',        path: 'demo'
-    get  :api_calls,    to: 'demo#api_calls',    path: 'api_calls'
-    get  :candlesticks, to: 'demo#candlesticks', path: 'candlesticks'
-    get  :trades,       to: 'demo#trades',       path: 'trades'
+    get  :demo,             to: 'demo#index',            path: 'demo'
+    get  :api_calls,        to: 'demo#api_calls',        path: 'api_calls'
+    get  :api_candlesticks, to: 'demo#api_candlesticks', path: 'api_candlesticks'
+    get  :api_trades,       to: 'demo#api_trades',       path: 'api_trades'
     resources :samples
   end
 

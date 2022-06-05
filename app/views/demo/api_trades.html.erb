@@ -2,7 +2,7 @@
   <h1>Demo: Trades</h1>
   <h5 class="text-info">Not all Pairs are working in Demo!</h5>
   <div>
-    <%= form_tag trades_path, method: :get do %>
+    <%= form_tag api_trades_path, method: :get do %>
       <%= select_tag :dotcom,  options_from_collection_for_select(@dotcoms, "id", "name", 
         @dotcom&.id), prompt: "- Dotcom", onchange: "this.form.submit()" 
       %>
