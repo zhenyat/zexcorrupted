@@ -56,6 +56,30 @@ module Request
   end
 
   private
+
+    ##############################################################################
+    # Checks whether response is an error message aka:
+    #   {"success":0, "error":"Invalid method"}
+    #   {"error":"Invalid Symbols Pair"}
+    #   {"code":-1102,"msg":"Mandatory parameter 'interval' was not sent, was empty/null, or malformed."}
+    #
+    # If error: returns empty hash, otherwise: returns response
+    # 
+    # caller_locations(1,1)[0].label - the calling method
+    #
+    #   06.06.2022
+    ##############################################################################
+    def request_error_check response
+      if response.is_a? Hash
+        error_msg = response
+        error_msg[:called_by] = caller_locations(1,1)[0].label
+        response = []
+      else
+        error_msg = {}
+      end
+      return response, error_msg
+    end
+
     # Clones public_api calls to demo_api
     def demo_calls(dotcom)
       Api.find_by( dotcom: dotcom, mode: 'public_api').calls
@@ -67,5 +91,9 @@ module Request
       @api     = Api.find_by(id: params[:api].presence)
       @call    = Call.find_by(id: params[:call].presence)
       @pair    = Pair.find_by(id: params[:pair].presence)
+    end
+
+    def timestamp
+      Time.now.strftime('%Y-%m-%d %H:%M:%S')
     end
 end

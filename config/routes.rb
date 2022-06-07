@@ -9,10 +9,6 @@
 #   16.03.2022  Rails 7
 ################################################################################
 Rails.application.routes.draw do
-  get 'demo/index'
-  get 'demo/public_api'
-  get 'demo/candlesticks'
-
   app_scope = MULTILINGUAL ? "/:locale" : "/"
   scope app_scope, locale: /#{I18n.available_locales.join("|")}/ do
 

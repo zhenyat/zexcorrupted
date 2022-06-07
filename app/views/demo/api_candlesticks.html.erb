@@ -11,9 +11,9 @@
       %>
     <% end %>
   </div>
-  <hr/>
   <div>
     <% if @dotcom.present? and @pair.present? and @candles.present? %>
+      <hr/>
       <h5>Pair: <%= @pair.code %></h5>
       <% if @dotcom.name == 'binance' %>
         <table class='table table-hover'>
@@ -80,16 +80,12 @@
           </tbody>
         </table>
       <% end %>
-  <% else%>
-    <% if @error_msg.present? %>
-      <div class="text-danger">
+    <% else%>
+      <% if @error_msg.present? %>
         <hr/>
-        <h5>Error</h5>
-          <p>Code: <strong><%= @error_msg['code'] %></strong></p>
-          <p>Message: <strong><%= @error_msg['msg'] %></strong></p>
-        </tr>     
-      </div>
+        <h5 class="text-danger">Error:</h5>
+        <%= table_body @error_msg %>
+      <% end %>
     <% end %>
-  <% end %>
   </div>
 </div>

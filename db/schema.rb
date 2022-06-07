@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_06_05_071514) do
+ActiveRecord::Schema[7.0].define(version: 2022_06_05_142651) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -76,6 +76,33 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_05_071514) do
     t.datetime "updated_at", null: false
     t.index ["api_id"], name: "index_calls_on_api_id"
     t.index ["name"], name: "index_calls_on_name", unique: true
+  end
+
+  create_table "candles", force: :cascade do |t|
+    t.bigint "candlestick_id", null: false
+    t.integer "start_stamp", null: false
+    t.decimal "open", precision: 15, scale: 5, null: false
+    t.decimal "close", precision: 15, scale: 5, null: false
+    t.decimal "low", precision: 15, scale: 5, null: false
+    t.decimal "high", precision: 15, scale: 5, null: false
+    t.decimal "amount_bought", precision: 15, scale: 8, null: false
+    t.decimal "amount_sold", precision: 15, scale: 8, null: false
+    t.integer "buys", null: false
+    t.integer "sales", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["candlestick_id"], name: "index_candles_on_candlestick_id"
+  end
+
+  create_table "candlesticks", force: :cascade do |t|
+    t.bigint "dotcom_id", null: false
+    t.bigint "pair_id", null: false
+    t.integer "slot", limit: 2, default: 0, null: false
+    t.integer "status", limit: 2, default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["dotcom_id"], name: "index_candlesticks_on_dotcom_id"
+    t.index ["pair_id"], name: "index_candlesticks_on_pair_id"
   end
 
   create_table "coin_nicknames", force: :cascade do |t|
@@ -186,6 +213,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_05_071514) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "apis", "dotcoms"
   add_foreign_key "calls", "apis"
+  add_foreign_key "candles", "candlesticks"
+  add_foreign_key "candlesticks", "dotcoms"
+  add_foreign_key "candlesticks", "pairs"
   add_foreign_key "coin_nicknames", "coins"
   add_foreign_key "pair_nicknames", "pairs"
   add_foreign_key "trades", "dotcoms"

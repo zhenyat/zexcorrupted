@@ -1,36 +1,35 @@
 module ZexHelper
   ##############################################################################
-  #   Hides secret values 
+  #   Classical Table tag: for ActiveRecord Object
+  #   e.g.
+  #     <%= display_standard_table(
+  #       [
+  #         { :name => 'last_name', :display_name => 'Last name' },
+  #         { :name => 'first_name', :display_name => 'First name' },
+  #         { :name => 'email',     :display_name => 'email' },
+  #         { :name => 'role',      :display_name => 'role' }
+  #       ], @users) %>
+  #
+  #   http://www.javawenti.com/?post=426796
   ##############################################################################
-  def key_tail value
-    "#{'*'*10} #{value.last(4)}"
-  end
-
-  ##############################################################################
-  #   Generate a table body with hash data
-  ##############################################################################
-  def table_body collection = {}
-    tbody = content_tag :tbody do
-      collection.collect { |key, value|
-       content_tag :tr do
-          concat content_tag(:td, key)
-          concat content_tag(:td, value)
-        end
-      }.join().html_safe
+  def display_standard_table(columns, collection = {})
+    thead = content_tag :thead do
+      content_tag :tr do
+        columns.collect {|column|  
+          concat content_tag(:th,column[:display_name])
+        }.join().html_safe 
+      end
     end 
-    content_tag :table, tbody, class: ["table", "table-striped"]
-  end
-
-  # Probe
-  def mytable
-    tag.table(class: ['table', 'table-striped']) do
-      concat(tag.tr)
-        concat(tag.td 'key1')
-        concat(tag.td 'value1')
-        concat(tag.tr)
-        concat(tag.td 'key2')
-        concat(tag.td 'value2')
+    tbody = content_tag :tbody do
+      collection.collect { |elem|
+        content_tag :tr do
+          columns.collect { |column|
+            concat content_tag(:td, elem.attributes[column[:name]])
+          }.to_s.html_safe
+        end  
+      }.join().html_safe
     end
+    content_tag :table, thead.concat(tbody), class: "table table-hover"
   end
 
   ##############################################################################
@@ -47,8 +46,31 @@ module ZexHelper
     # content_tag :div, images.join("\n").html_safe, class: "img-circle"
   end
 
-  def show_time timestamp
-    Time.at(timestamp).strftime('%Y-%m-%d %H:%M:%S')
+  ##############################################################################
+  #   Hides secret values 
+  ##############################################################################
+  def key_tail value
+    "#{'*'*10} #{value.last(4)}"
   end
-end
 
+  def show_time timestamp
+    Time.at(timestamp/1000).strftime('%Y-%m-%d %H:%M:%S')
+  end
+
+  ##############################################################################
+  #   Generates a table body with hash data
+  ##############################################################################
+  def table_body collection = {}
+    tbody = content_tag :tbody do
+      collection.collect { |key, value|
+        content_tag :tr do
+      # content_tag(:tr, class: "table-warning") do   #colorizing
+          concat content_tag(:td, key)
+          concat content_tag(:td, value)
+        end
+      }.join().html_safe
+    end 
+    content_tag :table, tbody, class: "table table-hover"
+  end
+
+end

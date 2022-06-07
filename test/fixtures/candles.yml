@@ -1,0 +1,25 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  candlestick: one
+  start_stamp: 2022-06-05 17:26:51
+  open: 9.99
+  close: 9.99
+  low: 9.99
+  high: 9.99
+  amount_bought: 9.99
+  amount_sold: 9.99
+  buys: 1
+  sales: 1
+
+two:
+  candlestick: two
+  start_stamp: 2022-06-05 17:26:51
+  open: 9.99
+  close: 9.99
+  low: 9.99
+  high: 9.99
+  amount_bought: 9.99
+  amount_sold: 9.99
+  buys: 1
+  sales: 1

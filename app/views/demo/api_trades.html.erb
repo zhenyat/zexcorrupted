@@ -68,13 +68,9 @@
       <% end %>
     <% else %>
       <% if @error_msg.present? %>
-        <div class="text-danger">
-          <hr/>
-          <h5>Error</h5>
-            <p>Code: <strong><%= @error_msg['code'] %></strong></p>
-            <p>Message: <strong><%= @error_msg['msg'] %></strong></p>
-          </tr>     
-        </div>
+        <hr/>
+        <h5 class="text-danger">Error:</h5>
+        <%= table_body @error_msg %>
       <% end %>
     <% end %>
   </div>

@@ -15,7 +15,7 @@
 #   buys          - Number of buy trades:       integer
 #   sales         - Number of sell trades:      integer
 #      
-#   04.06.2022  
+#   05.06.2022  
 ################################################################################
      
 class Candle < ApplicationRecord

@@ -11,6 +11,7 @@ class CreateCandles < ActiveRecord::Migration[7.0]
       t.decimal    :amount_sold,   null: false, precision: 15, scale: 8
       t.integer    :buys,          null: false
       t.integer    :sales,         null: false
+
       t.timestamps
     end
   end

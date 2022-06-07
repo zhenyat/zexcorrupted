@@ -48,14 +48,7 @@ class DemoController < ApplicationController
         else
           response = {'code': 'ZEX', 'msg': "#{@dotcom.name}} not allowed"}
         end
-        # Classify the response
-        if response.is_a? Hash
-          @error_msg = response
-          @candles = []
-        else
-          @candles = response
-          @error_msg = {}
-        end
+        @candles, @error_msg = request_error_check response
       end
     end
   end
@@ -91,14 +84,7 @@ class DemoController < ApplicationController
           response = {'code': 'ZEX', 'msg': "#{@dotcom.name}} not allowed"}
         end
       end
-      # Classify the response
-      if response.is_a? Hash
-        @error_msg = response
-        @trades = []
-      else
-        @trades = response
-        @error_msg = {}
-      end
+      @trades, @error_msg = request_error_check response
     end
   end
 end
