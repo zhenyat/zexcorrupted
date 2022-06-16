@@ -54,7 +54,7 @@ module ZexHelper
   end
 
   def show_time timestamp
-    Time.at(timestamp/1000).strftime('%Y-%m-%d %H:%M:%S')
+    Time.at(timestamp).strftime('%Y-%m-%d %H:%M:%S')
   end
 
   ##############################################################################

@@ -8,5 +8,6 @@ class CreateCandlesticks < ActiveRecord::Migration[7.0]
 
       t.timestamps
     end
+    add_index :candlesticks, [:dotcom_id, :pair_id, :slot], unique: true
   end
 end

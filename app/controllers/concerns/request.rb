@@ -91,6 +91,8 @@ module Request
       @api     = Api.find_by(id: params[:api].presence)
       @call    = Call.find_by(id: params[:call].presence)
       @pair    = Pair.find_by(id: params[:pair].presence)
+      @slot    = Candlestick.slots[params[:slot].presence] # this is a value (0,1,2...)
+                                                           # params[:slot] is a key: '1m', '3m',...
     end
 
     def timestamp

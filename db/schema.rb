@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_06_05_142651) do
+ActiveRecord::Schema[7.0].define(version: 2022_06_14_164800) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -66,6 +66,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_05_142651) do
     t.index ["dotcom_id"], name: "index_apis_on_dotcom_id"
   end
 
+  create_table "binance_candles", force: :cascade do |t|
+    t.decimal "quote_volume", precision: 15, scale: 5, null: false
+    t.integer "trades", null: false
+    t.decimal "taker_base_volume", precision: 15, scale: 5, null: false
+    t.decimal "taker_quote_volume", precision: 15, scale: 5, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "calls", force: :cascade do |t|
     t.bigint "api_id", null: false
     t.string "name", null: false
@@ -80,17 +89,17 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_05_142651) do
 
   create_table "candles", force: :cascade do |t|
     t.bigint "candlestick_id", null: false
+    t.string "candleable_type", null: false
+    t.bigint "candleable_id", null: false
     t.integer "start_stamp", null: false
     t.decimal "open", precision: 15, scale: 5, null: false
-    t.decimal "close", precision: 15, scale: 5, null: false
-    t.decimal "low", precision: 15, scale: 5, null: false
     t.decimal "high", precision: 15, scale: 5, null: false
-    t.decimal "amount_bought", precision: 15, scale: 8, null: false
-    t.decimal "amount_sold", precision: 15, scale: 8, null: false
-    t.integer "buys", null: false
-    t.integer "sales", null: false
+    t.decimal "low", precision: 15, scale: 5, null: false
+    t.decimal "close", precision: 15, scale: 5, null: false
+    t.decimal "volume", precision: 15, scale: 8, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["candleable_type", "candleable_id"], name: "index_candles_on_candleable"
     t.index ["candlestick_id"], name: "index_candles_on_candlestick_id"
   end
 
@@ -101,8 +110,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_05_142651) do
     t.integer "status", limit: 2, default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["dotcom_id", "pair_id", "slot"], name: "index_candlesticks_on_dotcom_id_and_pair_id_and_slot", unique: true
     t.index ["dotcom_id"], name: "index_candlesticks_on_dotcom_id"
     t.index ["pair_id"], name: "index_candlesticks_on_pair_id"
+  end
+
+  create_table "cexio_candles", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "coin_nicknames", force: :cascade do |t|

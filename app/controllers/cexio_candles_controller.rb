@@ -1,0 +1,2 @@
+class CexioCandlesController < ApplicationController
+end

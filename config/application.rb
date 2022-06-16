@@ -36,5 +36,13 @@ module Zex
     config.i18n.load_path        += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}')]  # YAML Multiple structure
 
     config.active_storage.replace_on_assign_to_many = true  # To be depricated in RoR 7.1
+
+    # Configures Dotcoms' params
+    config.after_initialize do
+      config.candle_types = []
+      Dotcom.active.each do |dotcom|
+        config.candle_types << dotcom.name.capitalize + 'Candle'
+      end
+    end
   end
 end

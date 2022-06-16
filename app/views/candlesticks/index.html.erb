@@ -1,0 +1,71 @@
+<div class="container">
+  <h1>Public: Candlesticks</h1>
+
+  <div>
+    <%= form_tag candlesticks_path, method: :get do %>
+      <%= select_tag :dotcom,  options_from_collection_for_select(@dotcoms, "id", "name", 
+        @dotcom&.id), prompt: "- Dotcom", onchange: "this.form.submit()" 
+      %>
+      <%= select_tag :pair,  options_from_collection_for_select(@pairs, "id", "code", 
+        @pair&.id), prompt: "- Pair", onchange: "this.form.submit()" 
+      %>
+      <%= select_tag :slot, options_for_select(@slots.map {|key, value| [key, key]}), 
+          prompt: "- Slot", onchange: "this.form.submit()"
+      %>
+    <% end %>
+  </div>
+
+  <% if @data.present? %>
+    <div>
+      <hr/>
+      <h4><%= "Candlestick: #{@candlestick.dotcom.name.capitalize}, #{@candlestick.pair.code}, #{@slots.key(@slot)}" %></h4>
+
+      <table class='table table-hover'>
+        <thead>
+          <th>Open time</th>
+          <th>Open</th>
+          <th>High</th>
+          <th>Low</th>
+          <th>Close</th>
+          <th>Volume</th>
+          <% if @candlestick.dotcom.name == 'binance' %>
+            <th>Quote asset volume</th>
+            <th>Number of trades</th>
+            <th>Taker buy base asset volume</th>
+            <th>Taker buy quote asset volume</th>
+          <% end %>
+        </thead>
+        <tbody>
+          <% @candlestick.candles.all.each do |candle| %>
+            <% if candle.close > candle.open%>
+              <tr class="text-success">
+            <% else %>
+              <tr class="text-danger">
+            <% end %>
+              <td><%= show_time(candle.start_stamp) %></td>
+              <td><%= candle.open %></td>
+              <td><%= candle.high %></td>
+              <td><%= candle.low %></td>
+              <td><%= candle.close %></td>
+              <td><%= candle.volume %></td>
+              <% if @candlestick.dotcom.name == 'binance' %>
+                <td><%= candle.candleable.quote_volume %></td>
+                <td><%= candle.candleable.trades %></td>
+                <td><%= candle.candleable.taker_base_volume  %></td>
+                <td><%= candle.candleable.taker_quote_volume %></td>
+              <% end %>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+
+  <% if @error_msg.present? %>
+    <div>
+      <hr/>
+      <h5 class="text-danger">Error:</h5>
+        <%= table_body @error_msg %>
+    </div>
+  <% end %>
+</div>

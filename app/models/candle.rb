@@ -1,68 +1,37 @@
 ################################################################################
 # Model:  Candle
 #
-# Purpose:  Candlestick's Candle
+# Purpose:  Candlestick's Candle with DelegatedType of Dotcoms' candles
 #
 # Candle attributes:
-#   candlestick   - Foreign key
-#   start_stamp   - Candle's initial timestamp: integer
-#   open          - Open price:                 decimal
-#   close         - Closing price               decimal
-#   low           - Lowest price:               decimal
-#   high          - Highest price:              decimal
-#   amount_bought - Total amount of buys:       decimal
-#   amount_sold   - Total amount of sales:      decimal
-#   buys          - Number of buy trades:       integer
-#   sales         - Number of sell trades:      integer
-#      
-#   05.06.2022  
+#   candlestick     - Foreign key
+#   candleable_id   - FK
+#   candleable_type
+#   start_stamp     - Candle's initial timestamp: integer
+#   open            - Open price:                 decimal
+#   high            - Highest price:              decimal
+#   low             - Lowest price:               decimal
+#   close           - Closing price               decimal
+#   volume          - Total volume(?):            decimal
+#
+#  14.06.2022 ZT
 ################################################################################
-     
 class Candle < ApplicationRecord
-  #  attr_accessor :amount, :amount_bought, :amount_sold, :close, :color, :high, :low, :open, :start_time
-    
-  belongs_to :candlestick
-  
-  validates :open,  presence: true, numericality: { greater_than: 0 }
-  validates :close, presence: true, numericality: { greater_than: 0 }
-  validates :low,   presence: true, numericality: { greater_than: 0 }
-  validates :high,  presence: true, numericality: { greater_than: 0 }
-  
-  def amount
-    amount_bought + amount_sold
-  end
-  
-  def average
-    (high + low + close) / 3
-  end
-  
-  def body
-    (close - open).abs
-  end
-  
-  def color
-    (open >= close) ? 'red' : 'green'
-  end
-  
-  def doji?
-    body < EQUAL_PERCENT / 100.0 * [close, open].min
+  belongs_to :candlestick, required: true
+
+  delegated_type :candleable, types: Rails.application.config.candle_types
+# delegated_type :candleable, types: %w[ Binance Cexio ] # instead of piolymorphic
+
+  validates :candlestick, presence: true
+  validates :candleable,  presence: true
+
+  # Use :to_global_id to populate the form if needed
+  def candleable_gid
+    candleable&.to_global_id
   end
 
-  def dragonfly_doji?
-    if self.doji?
-      
-    end
-  end
-  
-  def lower_shadow
-    (open >= close) ? close - low  : open - low
-  end
-  
-  def type
-    (open >= close) ? 'bear' : 'bull'
-  end
-  
-  def upper_shadow
-    (open >= close) ? high - open  : high - close
+  # Set the :candleable from a Global ID (handles the form submission)
+  def candleable_gid=(gid)
+    self.candleable = GlobalID::Locator.locate gid
   end
 end

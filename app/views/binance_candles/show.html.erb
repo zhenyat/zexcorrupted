@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @binance_candle %>
+
+<div>
+  <%= link_to "Edit this binance candle", edit_binance_candle_path(@binance_candle) %> |
+  <%= link_to "Back to binance candles", binance_candles_path %>
+
+  <%= button_to "Destroy this binance candle", @binance_candle, method: :delete %>
+</div>

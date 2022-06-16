@@ -22,7 +22,7 @@ class DemoController < ApplicationController
 
   def api_candlesticks
     @dotcoms = Dotcom.active
-    @pairs   = @dotcom.present? ? @dotcom.pairs : Pair.active.order(:status).order(:code)
+    @pairs   = @dotcom.present? ? @dotcom.pairs.active : Pair.active.order(:code)
 
     if @pair.present?
       if @dotcom.present?
@@ -57,7 +57,7 @@ class DemoController < ApplicationController
   def api_trades
     @dotcoms = Dotcom.active
     # @pairs = Pair.active.order(:status).order(:code)
-    @pairs   = @dotcom.present? ? @dotcom.pairs : Pair.active.order(:status).order(:code)
+    @pairs   = @dotcom.present? ? @dotcom.pairs.active : Pair.active.order(:code)
 
     if @pair.present?
       if @dotcom.present?

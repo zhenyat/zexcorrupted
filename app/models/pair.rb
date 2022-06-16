@@ -21,6 +21,7 @@ class Pair < ApplicationRecord
   belongs_to :quote, class_name: 'Coin'
 
   has_many :pair_nicknames, dependent: :destroy
+  has_many :candlesticks, dependent: :destroy
   has_and_belongs_to_many :dotcoms, join_table: :dotcoms_pairs
   # has_many   :trades
 

@@ -14,18 +14,19 @@
 ################################################################################
 class Candlestick < ApplicationRecord
   belongs_to :dotcom, required: true
-  belongs_to :pair, required: true
+  belongs_to :pair,   required: true
 
-  has_many :candles
+  has_many :candles, dependent: :destroy
   
-  enum slot:   %w(1m 3m 5m 15m 30m 1h 2h 4h 6h 8h 12h 1d 3d 1w 1M)
+  enum slot:   %w(1m 5m)
+  # enum slot:   %w(1m 3m 5m 15m 30m 1h 2h 4h 6h 8h 12h 1d 3d 1w 1M)
   enum status: %w(active archived)
 
-  validates :dotcom, presence: true
-  validates :pair,   uniqueness: { scope: :slot }
+  validates :dotcom, presence: true, uniqueness: { scope: [:pair, :slot] }
+  validates :pair,   presence: true, uniqueness: { scope: [:dotcom, :slot] }
 
   # Candle interval in seconds
-  def interval slot 
+  def interval_in_sec slot 
     unit = slot.last
     case unit
     when 'm'
@@ -38,6 +39,16 @@ class Candlestick < ApplicationRecord
       slot.chop.to_i * 3600 * 24 * 7
     else  # 1 Month
       slot.chop.to_i * 3600 * 24 * 7 * 4
+    end
+  end
+
+  def options 
+    case self.dotcom.name
+    when 'binance'
+      {symbol: self.pair.code.sub('/', ''), interval: self.slot, limit: 50}
+    when 'cexio'
+
+    else
     end
   end
 end

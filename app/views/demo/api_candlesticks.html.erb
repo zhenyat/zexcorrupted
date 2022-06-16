@@ -7,7 +7,7 @@
         @dotcom&.id), prompt: "- Dotcom", onchange: "this.form.submit()" 
       %>
       <%= select_tag :pair,  options_from_collection_for_select(@pairs, "id", "code", 
-        @dotcom&.id), prompt: "- Pair", onchange: "this.form.submit()" 
+        @pair&.id), prompt: "- Pair", onchange: "this.form.submit()" 
       %>
     <% end %>
   </div>

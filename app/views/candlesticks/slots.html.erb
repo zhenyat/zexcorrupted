@@ -1,0 +1,12 @@
+<div class="container">
+  <h1>Slots</h1>
+
+  <div>
+    <%= form_tag slots_path, method: :get do %>
+      <%= select_tag :slot, options_for_select(@slots.map {|key, value| [key, key]}), 
+          prompt: "- Slot", onchange: "this.form.submit()"
+      %>
+    <% end %>
+  </div>
+
+</div>
