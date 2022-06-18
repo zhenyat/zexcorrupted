@@ -22,7 +22,7 @@
               <%= link_to "Select Candlestick", candlesticks_path, class: "text-decoration-none" %>
             </div>
             <div class="dropdown-item">
-              <%#= link_to "Trades History",  "#", class: "text-decoration-none" %>
+              <%= link_to "Candlestick Charts",  charts_path, class: "text-decoration-none" %>
             </div>
             <div class="dropdown-item">
               <%#= link_to "OHLC",  "#", class: "text-decoration-none" %>
@@ -81,6 +81,9 @@
             </div>
             <div class="dropdown-item">
               <%= link_to "API Trades", api_trades_path, class: "text-decoration-none" %>
+            </div>
+            <div class="dropdown-item">
+              <%= link_to "Chart Demo", demo_chart_path, class: "text-decoration-none" %>
             </div>
           </div>
         </li>

@@ -67,6 +67,7 @@ gem 'devise_token_auth', github:  'lynndylanhurley/devise_token_auth'
 # gem "simple_scheduler"
 
 # Charts
+gem 'apexcharts', '~> 0.2.0'
 # gem 'gon'
 # gem 'fusioncharts-rails'
 # gem 'chartkick'

@@ -1,4 +1,5 @@
 class DemoController < ApplicationController
+  include ChartsPro
   include Request
   before_action :selected_from_dddl, only: [:api_calls, :api_candlesticks, :api_trades]
 
@@ -86,5 +87,10 @@ class DemoController < ApplicationController
       end
       @trades, @error_msg = request_error_check response
     end
+  end
+
+  def chart
+    @binance_data = apex_charts_data BinanceCandle.all
+    @cexio_data   = apex_charts_data CexioCandle.all
   end
 end

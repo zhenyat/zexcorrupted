@@ -9,8 +9,7 @@
 #   16.03.2022  Rails 7
 ################################################################################
 Rails.application.routes.draw do
-  resources :cexio_candles
-  resources :binance_candles
+
   app_scope = MULTILINGUAL ? "/:locale" : "/"
   scope app_scope, locale: /#{I18n.available_locales.join("|")}/ do
 
@@ -40,7 +39,12 @@ Rails.application.routes.draw do
     get  :api_candlesticks, to: 'demo#api_candlesticks', path: 'api_candlesticks'
     get  :api_trades,       to: 'demo#api_trades',       path: 'api_trades'
     get  :candlesticks,     to: 'candlesticks#index',    path: 'candlesticks'
-    get  :slots,            to: 'candlesticks#slots',    path: 'slots'    
+    get  :demo_chart,       to: 'demo#chart',            path: 'demo_chart'
+
+    get  :slots,            to: 'candlesticks#slots',    path: 'slots'
+    get  :charts,           to: 'charts#index',          path: 'charts'
+    resources :cexio_candles
+    resources :binance_candles
     resources :samples
   end
 
