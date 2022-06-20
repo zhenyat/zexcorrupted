@@ -10,7 +10,8 @@
 #                 enum {1m|3m|5m|15m|30m|1h|2h|4h|6h|8h|12h|1d|3d|1w|1M}
 #   status      - enum { active (0) | archived (1) }
 #
-#  05.06.2022 ZT
+#   05.06.2022 ZT
+#   20.06.2022  Last update
 ################################################################################
 class Candlestick < ApplicationRecord
   belongs_to :dotcom, required: true
@@ -42,13 +43,13 @@ class Candlestick < ApplicationRecord
     end
   end
 
-  def options 
+  def options limit: 50
     case self.dotcom.name
-    when 'binance'
-      {symbol: self.pair.code.sub('/', ''), interval: self.slot, limit: 50}
-    when 'cexio'
+      when 'binance'
+        {symbol: self.pair.code.sub('/', ''), interval: self.slot, limit: limit}
+      when 'cexio'
 
-    else
+      else
+      end
     end
-  end
 end

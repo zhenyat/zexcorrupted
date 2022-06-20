@@ -14,13 +14,15 @@
 #   close           - Closing price               decimal
 #   volume          - Total volume(?):            decimal
 #
-#  14.06.2022 ZT
+#   candleable      - Dotcoms specific attributes: delegated_type
+#
+#  20.06.2022 ZT
 ################################################################################
 class Candle < ApplicationRecord
   belongs_to :candlestick, required: true
 
   delegated_type :candleable, types: Rails.application.config.candle_types
-# delegated_type :candleable, types: %w[ Binance Cexio ] # instead of piolymorphic
+# delegated_type :candleable, types: %w[ BinanceCandle CexioCandle ] # instead of piolymorphic
 
   validates :candlestick, presence: true
   validates :candleable,  presence: true
