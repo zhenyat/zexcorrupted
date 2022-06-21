@@ -40,9 +40,11 @@ Rails.application.routes.draw do
     get  :api_trades,       to: 'demo#api_trades',       path: 'api_trades'
     get  :candlesticks,     to: 'candlesticks#index',    path: 'candlesticks'
     get  :demo_chart,       to: 'demo#chart',            path: 'demo_chart'
+    get  :demo_import,      to: 'demo#import',           path: 'demo_import'
 
     get  :slots,            to: 'candlesticks#slots',    path: 'slots'
     get  :charts,           to: 'charts#index',          path: 'charts'
+
     resources :cexio_candles
     resources :binance_candles
     resources :samples

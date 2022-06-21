@@ -1,7 +1,10 @@
 class DemoController < ApplicationController
+  require 'csv'
+
   include ChartsPro
   include Request
-  before_action :selected_from_dddl, only: [:api_calls, :api_candlesticks, :api_trades]
+
+  before_action :selected_from_dddl#, only: [:api_calls, :api_candlesticks, :api_trades]
 
   def index
   end
@@ -90,7 +93,45 @@ class DemoController < ApplicationController
   end
 
   def chart
-    @binance_data = apex_charts_data BinanceCandle.all
-    @cexio_data   = apex_charts_data CexioCandle.all
+    @binance_data = apex_charts_data BinanceCandle.last(500)
+    # @cexio_data   = apex_charts_data CexioCandle.all
+  end
+
+  def import
+    @time_elapsed = []
+
+    dotcom = Dotcom.find_by name: 'binance'
+    candle_model=(dotcom.name.capitalize + 'Candle').constantize
+     
+    pair = Pair.find_by code: 'BTC/USDT'
+    slot = '3m'
+    candlestick = Candlestick.find_by dotcom: dotcom, pair: pair, slot: slot
+
+    file = "tmp/data/Binance/BTCUSDT-3m-2022-01.csv"
+    data = CSV.read(file)
+    puts "======", data.count, candlestick.inspect
+    t_start = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+
+    data.each do  |datum|
+      candle = Candle.new(
+        candlestick: candlestick, 
+        start_stamp: dotcom.name == 'binance' ? datum[0].to_i/1000 : datum[0].to_i,
+        open:        datum[1].to_f,
+        high:        datum[2].to_f,
+        low:         datum[3].to_f,
+        close:       datum[4].to_f,
+        volume:      datum[5].to_f,
+        candleable:  candle_model.new
+      )
+      if candle.candleable_type == 'BinanceCandle'
+        candle.candleable.quote_volume = datum[7].to_f
+        candle.candleable.trades = datum[8].to_i
+        candle.candleable.taker_base_volume = datum[9].to_f
+        candle.candleable.taker_quote_volume = datum[10].to_f
+      end
+      candle.save!
+    end
+    t_finish = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+    @time_elapsed = (t_finish - t_start).round(2)
   end
 end
