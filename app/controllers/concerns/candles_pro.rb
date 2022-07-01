@@ -29,4 +29,12 @@ module CandlesPro
 #    timestamp / slot * slot + slot
     Time.parse("2018-06-13 00:00").to_i
   end
+
+  # def current_clock_time
+  #   Process.clock_gettime(Process::CLOCK_MONOTONIC)
+  # end
+
+  # def elapsed_time time_at_start, time_at_finish
+  #   (time_at_finish - time_at_start).round(2)
+  # end
 end

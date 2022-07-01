@@ -25,7 +25,7 @@ class BinanceCandlesController < ApplicationController
     @binance_candle = BinanceCandle.new(binance_candle_params)
 
     if @binance_candle.save
-      redirect_to @binance_candle, notice: t('messages.created', model: Binance candle.class.model_name.human)
+      redirect_to @binance_candle, notice: t('messages.created', model: BinanceCandle.class.model_name.human)
     else
       render :new
     end
@@ -33,7 +33,7 @@ class BinanceCandlesController < ApplicationController
 
   def update
     if @binance_candle.update(binance_candle_params)
-      redirect_to @binance_candle, notice: t('messages.updated', model: Binance candle.class.model_name.human)
+      redirect_to @binance_candle, notice: t('messages.updated', model: BinanceCandle.class.model_name.human)
     else
       render :edit
     end
@@ -41,7 +41,7 @@ class BinanceCandlesController < ApplicationController
 
   def destroy
     @binance_candle.destroy
-    redirect_to binance_candles_url, notice: t('messages.deleted', model: Binance candle.class.model_name.human)
+    redirect_to binance_candles_url, notice: t('messages.deleted', model: BinanceCandle.class.model_name.human)
   end
 
   private

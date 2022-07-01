@@ -40,7 +40,7 @@ class Pair < ApplicationRecord
     "#{base.code.downcase}_#{quote.code.downcase}"
   end
 
-  def symbol(dotcom_name:)
+  def symbol dotcom_name:
     case dotcom_name
     when 'binance'
       self.code.gsub('/', '')

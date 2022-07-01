@@ -42,6 +42,9 @@ Rails.application.routes.draw do
     get  :demo_chart,       to: 'demo#chart',            path: 'demo_chart'
     get  :demo_import,      to: 'demo#import',           path: 'demo_import'
 
+    get  :trades_index,      to: 'trades#index',         path: 'trades'
+    get  :trades_import,     to: 'trades#import',        path: 'trades_import'
+
     get  :slots,            to: 'candlesticks#slots',    path: 'slots'
     get  :charts,           to: 'charts#index',          path: 'charts'
 

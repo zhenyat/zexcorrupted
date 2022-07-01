@@ -344,6 +344,7 @@ DEPENDENCIES
   pundit
   rack-cors
   rails (~> 7.0.3)
+  rubyzip
   seed_dump
   seedbank
   selenium-webdriver

@@ -7,7 +7,7 @@
 #   dotcom     - Foreign key
 #   pair       - Foreign key
 #   kind       - Trade type                     enum {sell (0)| buy (1)}
-#   rate       - Price to be bought / sold at   decimal
+#   price      - Price to be bought / sold at   decimal
 #   amount     - Amount to be bought / sold     decimal
 #   tid        - WEX Trade ID                   integer
 #   timestamp  - Trade timestamp                integer

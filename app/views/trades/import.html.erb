@@ -1,0 +1,30 @@
+<div class="container">
+  <h1>Trades Import</h1>
+
+  <div>
+    <%= form_tag trades_import_path, method: :get do %>
+      <%= select_tag :dotcom,  options_from_collection_for_select(@dotcoms, "id", "name", 
+        @dotcom&.id), prompt: "- Dotcom", onchange: "this.form.submit()" 
+      %>
+      <%= select_tag :pair,  options_from_collection_for_select(@pairs, "id", "code", 
+        @pair&.id), prompt: "- Pair", onchange: "this.form.submit()" 
+      %>
+      <%= select_tag :year, options_for_select(Rails.configuration.years), 
+        prompt: "- Year"#, onchange: "this.form.submit()"
+      %>
+      <%= select_tag :month, options_for_select(Rails.configuration.months.map {|key| key}), 
+        prompt: "- Month", onchange: "this.form.submit()"
+      %>
+    <% end %>
+  </div>
+
+  <hr/>
+  <div>
+    <% if @trades_created.present? and @trades_created > 0 %>
+      <h5>Statistics:</h5>
+      <p><%= "Download_time: #{@download_time} sec" %></p>
+      <p><%= "Unzip time: #{@unzip_time} sec" %></p>
+      <p><%= "Fill time: #{@fill_time} sec" %></p>
+      <p><%= "Trades created: #{@trades_created}" %></p>
+    <% end %>
+</div>

@@ -52,6 +52,7 @@ gem 'translate_enum'
 # gem 'haml-rails'      # https://github.com/indirect/haml-rails
 gem 'pundit'            # https://github.com/elabs/pundit
 gem 'countries'
+gem 'rubyzip'
 
 gem 'net-http'
 gem 'rack-cors'
