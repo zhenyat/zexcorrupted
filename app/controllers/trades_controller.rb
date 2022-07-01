@@ -47,40 +47,42 @@ class TradesController < ApplicationController
 
       case @dotcom.name
       when 'binance'
-        pair_symbol = @pair.symbol(dotcom_name: @dotcom.name)
-        source      = "#{pair_symbol}-trades-#{@year.first}-#{@month.first}.zip"
-        end_point   = "https://data.binance.vision/data/spot/monthly/trades/#{pair_symbol}/"
-        url         = end_point + source
-        zip_file     = local_directory + source
+        pair_symbol    = @pair.symbol(dotcom_name: @dotcom.name)
 
+        # ZIP source
+        remote_zip_file = "#{pair_symbol}-trades-#{@year.first}-#{@month.first}.zip"
+        local_zip_file  = local_directory + remote_zip_file
+        end_point      = "https://data.binance.vision/data/spot/monthly/trades/#{pair_symbol}/"
+        url_zip        = end_point + remote_zip_file
+
+        # Checksum file
+        remote_checksum_file = remote_zip_file + '.CHECKSUM'
+        local_checksum_file  = local_zip_file  + '.CHECKSUM'
+        url_checksum        = end_point + remote_checksum_file
       when 'cexio'
 
       else
 
       end
 
-      # Download ZIP file
-      File.open(zip_file, "wb") {|file| file.write URI.open(url).read}
-
-      # Checksum file
-      checksum_file = source + '.CHECKSUM'
-      url          = end_point + checksum_file
+      # Download ZIP & Checksum files
+      File.open(local_zip_file, "wb") {|file| file.write URI.open(url_zip).read}
+      File.open(local_checksum_file, "wb") {|file| file.write URI.open(url_checksum).read}
 
       # Checksum verification
-      system "shasum -a 256 -c #{checksum_file}"
-      system "cd #{local_directory}; shasum -a 256 -c ./#{checksum_file}"
-      if $?.exitstatus == 0  # $?.success?
-        File.write(log_file, "#{zip_file} OK\n", mode: 'a')
+      system "cd #{local_directory}; shasum -a 256 -c ./#{remote_checksum_file}"
+      if $?.exitstatus == 0  # or: $?.success?
+        File.write(log_file, "#{local_zip_file} OK\n", mode: 'a')
       else 
-        File.write(log_file, "#{zip_file}: FAILED\nshasum process\n", mode: 'a')
+        File.write(log_file, "#{local_zip_file}: FAILED\nshasum process\n", mode: 'a')
       end
 
       t_finish_download = current_clock_time
-      @download_time = elapsed_time time_at_start: t_start, time_at_finish: t_finish_download
+      @download_time   = elapsed_time time_at_start: t_start, time_at_finish: t_finish_download
 
       # Unzip
-      csv_file = zip_file.gsub('zip', 'csv')
-      Zip::File.open(zip_file) do |file|
+      csv_file = local_zip_file.gsub('zip', 'csv')
+      Zip::File.open(local_zip_file) do |file|
         file.each do |f|
           fpath = File.join(local_directory, f.name)
           file.extract(f, fpath) unless File.exist?(fpath)
@@ -105,7 +107,7 @@ class TradesController < ApplicationController
           timestamp: row[4].to_i / 1000
         )
         @trades_created += 1
-        # break if @trades_created == 52
+        # break if @trades_created == 30
       end
       t_finish_populate = current_clock_time
       @fill_time = elapsed_time time_at_start: t_finish_unzip, time_at_finish: t_finish_populate
