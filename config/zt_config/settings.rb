@@ -25,7 +25,9 @@ end
 MAIL_BCC = ZT_CONFIG['mail']['bcc']
 
 ##### Years & months for DDDLs
-Rails.configuration.years  = %w(2022 2021 2020 2019 2018 2017)
+years = []
+(ZT_CONFIG['start_year']..Time.now.year).each {|e| years << e.to_s}
+Rails.configuration.years  = years
 Rails.configuration.months = %w(01 02 03 04 05 06 07 08 09 10 11 12)
 
 ##### Multilingual Mode #####

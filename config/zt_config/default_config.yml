@@ -20,13 +20,14 @@ defaults: &defaults
     status:         false
     path:           ''
 
-  mail:
-    bcc:            zt@mail.ru
-    path:           public/mail/attachments
-
   multilingual:
     status:         true
 
+  start_year:       2017  # for DDDL
+
+  mail:
+    bcc:            zt@mail.ru
+    path:           public/mail/attachments
 
 development:
   <<: *defaults

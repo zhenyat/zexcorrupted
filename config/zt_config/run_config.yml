@@ -8,11 +8,8 @@
 #   11.10.2016  ZT  Inherited from BKC 95km
 ################################################################################
 
-mail:
-  bcc:  evgt@mail.ru
-
 debug:
-  status:  true
+  status:   true
 
 #multilingual:
 #  status:  false
