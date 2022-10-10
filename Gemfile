@@ -20,7 +20,7 @@ source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby "3.1.2"
-gem "rails", "~> 7.0.3" # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
+gem "rails", "~> 7.0.4" # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 
 gem "sprockets-rails"   # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "puma"              # Use the Puma web server [https://github.com/puma/puma]
